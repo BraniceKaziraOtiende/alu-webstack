@@ -8,17 +8,14 @@ global
         group haproxy
         daemon
 
-
         # Default SSL material locations
         ca-base /etc/ssl/certs
         crt-base /etc/ssl/private
-
 
         # See: https://ssl-config.mozilla.org/#server=haproxy&server-version=2.0.3&config=intermediate
         ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-S>
         ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
         ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
-
 
 defaults
         log     global
@@ -43,14 +40,14 @@ frontend clickviral-frontend
         http-request set-header X_Forwarded-Proto http
         default_backend clickviral-backend
 
-frontend clickviral-tech-frontend
-    bind *:443 /etc/letsencrypt/live/www.kazirabranice.tech/fullchain.pem
-    http-request set-header X-Forwarded-Proto https
-    default_backend clickviral-tech-backend
+frontend clickviral-frontend-https
+        bind *:443 ssl crt /etc/haproxy/certs/clickviral.tech.pem
+        http-request set-header X-Forwarded-Proto https
+        default_backend clickviral-backend
 
 backend clickviral-tech-backend
-    balance roundrobin
-    server 6208-web-01 54.86.178.72:80 check
-    server 6208-web-02 98.80.118.192:80 check
+        balance roundrobin
+        server 6208-web-01 54.86.178.72:80 check
+        server 6208-web-02 98.80.118.192:80 check
 
 
