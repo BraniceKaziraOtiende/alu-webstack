@@ -53,3 +53,4 @@ backend clickviral-tech-backend
     server 6208-web-01 54.86.178.72:80 check
     server 6208-web-02 98.80.118.192:80 check
 
+
